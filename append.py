@@ -31,8 +31,8 @@ def get_last_date_from_db():
     logger.info("Starting to retrieve last date from database")
     try:
         # Connect to the test database
-        conn = sqlite3.connect('currency_test.db')
-        logger.info("Connected to currency_test.db")
+        conn = sqlite3.connect('currency_data.db')
+        logger.info("Connected to currency_data.db")
         
         # Get the table name
         cursor = conn.cursor()
@@ -156,8 +156,8 @@ def update_database(new_data):
             return
             
         # Connect to the database
-        conn = sqlite3.connect('currency_test.db')
-        logger.info("Connected to currency_test.db for update")
+        conn = sqlite3.connect('currency_data.db')
+        logger.info("Connected to currency_data.db for update")
         
         # Get the table name
         cursor = conn.cursor()
