@@ -1,0 +1,17 @@
+# Core data processing libraries
+pandas==2.2.3
+numpy==2.2.3
+yfinance==0.2.54
+
+# Database libraries
+db-sqlite3==0.0.1
+
+# Date and time handling
+python-dateutil>=2.8.2
+
+# Standard libraries (included in Python)
+# logging
+# os
+# sys
+# ast
+# datetime
