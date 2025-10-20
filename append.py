@@ -27,12 +27,12 @@ logging.basicConfig(
 
 logger = logging.getLogger('currency_append')
 
-def get_last_date_from_db():
+def get_last_date_from_db(db_path='currency_data.db'):
     logger.info("Starting to retrieve last date from database")
     try:
         # Connect to the test database
-        conn = sqlite3.connect('currency_data.db')
-        logger.info("Connected to currency_data.db")
+        conn = sqlite3.connect(db_path)
+        logger.info(f"Connected to {db_path}")
         
         # Get the table name
         cursor = conn.cursor()
@@ -133,7 +133,7 @@ def fix_currency_data(all_currency_data):
         nan_count_before = all_currency_data.isna().sum().sum()
         logger.info(f"Number of NaN values before filling: {nan_count_before}")
         
-        # Fill missing values using ffill() and bfill() instead of deprecated fillna(method='ffill')
+        # Fill missing values using ffill() and bfill()
         all_currency_data = all_currency_data.ffill()
         all_currency_data = all_currency_data.bfill()
         
@@ -148,7 +148,7 @@ def fix_currency_data(all_currency_data):
         logger.error(f"Error in fix_currency_data: {str(e)}", exc_info=True)
         raise
 
-def update_database(new_data):
+def update_database(new_data, db_path='currency_data.db'):
     logger.info("Starting database update")
     try:
         if new_data is None:
@@ -156,8 +156,8 @@ def update_database(new_data):
             return
             
         # Connect to the database
-        conn = sqlite3.connect('currency_data.db')
-        logger.info("Connected to currency_data.db for update")
+        conn = sqlite3.connect(db_path)
+        logger.info(f"Connected to {db_path} for update")
         
         # Get the table name
         cursor = conn.cursor()
@@ -179,11 +179,11 @@ def update_database(new_data):
         logger.error(f"Error in update_database: {str(e)}", exc_info=True)
         raise
 
-def main():
+def main(db_path='currency_data.db'):
     logger.info("=== Starting currency data update process ===")
     try:
         # Get the last date from the database and currency codes
-        last_date, currency_codes = get_last_date_from_db()
+        last_date, currency_codes = get_last_date_from_db(db_path)
         logger.info(f"Last date in database: {last_date}")
         logger.info(f"Found {len(currency_codes)} currency codes")
         
@@ -194,7 +194,7 @@ def main():
         new_data = fix_currency_data(new_data)
         
         # Update the database
-        update_database(new_data)
+        update_database(new_data, db_path)
         
         logger.info("=== Currency data update process completed successfully ===")
     except Exception as e:
